@@ -1,0 +1,95 @@
+APIS list of MyCool BabyApp.
+
+BASE_URL:http://mycoolbaby.limpidsol.com/
+
+##################################################
+**Login Api ** type = Post; ** 
+##################################################
+
+	
+	path: "api/login",
+
+	////......Required feilds.....////
+
+   	string "email"        =>required
+        string "password"     =>required
+	string "device_name"  =>required
+
+##################################################
+**SignUp Api ** type = Post; **
+##################################################
+
+ 
+  	path: "api/signup",
+
+	////......Required feilds.....////
+	
+	string "email"   	 =>required
+	string "password"	 =>required
+	string "first_name",     =>required
+	string "last_name",      =>required
+
+	////......Optional feilds .....////
+	file   "profile_image",  =>optional
+	
+##################################################
+**Forget Api ** type = Post; **
+##################################################
+
+	path: "api/forget",
+
+	////......Required feilds.....////
+	string "email"   =>required
+
+##################################################
+** ChangePassword Api ** type = Post; **
+##################################################
+
+	path: "api/changepassword",
+
+	////......Required feilds.....////
+
+	string  "reset_code"       =>=>required
+	string  "password"	   =>required
+
+##################################################
+** SubCategories Api ** type = Get**
+##################################################
+
+	path: "api/subcategories",
+
+	////......Authorization token Required.....////
+	   bearer token       =>required
+
+	////......To view image.....////
+
+	use BASE_URL + assets/uploads/picture.png
+
+##################################################
+**Categories Api ** type = Get**
+##################################################
+
+	path: "api/categories",
+
+	////......Authroization token Required.....////
+	   bearer token       =>required
+
+	////......To view image.....////
+	use BASE_URL + assets/uploads/picture.png
+
+##################################################
+**Update Api ** type = Get**
+##################################################
+
+
+      path: "api/update",
+		
+	******Required only Authorized*****
+
+	////......Optional feilds .....////
+
+	string "email",     =>optional
+	string "first_name",     =>optional
+	string "last_name",     =>optional
+	file   "profile_image",  =>optional
+
