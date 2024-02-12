@@ -30,7 +30,7 @@ class CategoryController extends Controller
             ]);
             $url = 'https://fcm.googleapis.com/fcm/send';
 
-                       $FcmToken = UserDevice::whereNotNull('device_token')->pluck('device_token')->all();
+            $FcmToken = UserDevice::whereNotNull('device_token')->pluck('device_token')->all();
 
 
             $serverKey = 'AAAAhdJdnhw:APA91bG4ccNHlgsyaJV7qy2xBGuzqEYYqr4NA9q5rYgLYtcwnuE91fmyQDUL4Say9xMeIKXB2FEWzq7j870BQfusitIclBEF3ihKR_W_LJISk2VYmFu7N-GhvXugHqscvx1evZdZuMxb'; // ADD SERVER KEY HERE PROVIDED BY FCM
@@ -69,16 +69,13 @@ class CategoryController extends Controller
             // Close connection
             curl_close($ch);
             // FCM response
-          
+
             Session::flash('success', 'Category Add Successfully!');
             return redirect()->back();
-
         } catch (\Exception $exception) {
             Session::flash('error', 'Category Add failed!');
             return redirect()->back();
-
         }
-
     }
 
     public function updateOrder(Request $request)
@@ -100,7 +97,7 @@ class CategoryController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'name' => '',
+            'name' => 'required',
         ]);
 
 
@@ -111,9 +108,7 @@ class CategoryController extends Controller
             return redirect()->back();
         } catch (\Exception $exception) {
             return redirect()->back()->with('error', $exception->getMessage() . ' ' . $exception->getLine());
-
         }
-
     }
 
     public function destroy($id)
@@ -127,6 +122,5 @@ class CategoryController extends Controller
             Session::flash('success', 'Category has been Deleted');
             return redirect()->back();
         }
-
     }
 }

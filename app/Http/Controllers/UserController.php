@@ -30,10 +30,18 @@ class UserController extends Controller
     }
     public function postLogin(Request $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+        // $request->validate([
+        //     'email' => 'required',
+        //     'password' => 'required',
+        // ]);
+
+        // User::create([
+        //     'first_name' => 'admin',
+        //     'last_name' => 'admin',
+        //     'user_type' => '1',
+        //     'email' => 'admin@admin.com',
+        //     'password' => Hash::make('125@0ab%'),
+        // ]);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'user_type' => 1], $request->remember)) {
             //            if (!empty($chek_device)) {

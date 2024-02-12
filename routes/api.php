@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\API\BookController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\WallpaperController;
 use App\Http\Controllers\API\ReviewController;
+use App\Http\Controllers\API\SurahController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,31 +19,41 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['namespace' => 'API'], function() {
+
+Route::group(['namespace' => 'API'], function () {
     //Public Routes//
-    Route::post('/login',[UserController::class,'postLogin']);
-    Route::post('/signup',[UserController::class,'signup']);
-    Route::post('/forget',[UserController::class,'forgetpassword']);
-    Route::post('/changepassword',[UserController::class,'changepassword']);
+    Route::post('/login', [UserController::class, 'postLogin']);
+    Route::post('/signup', [UserController::class, 'signup']);
+    Route::post('/forget', [UserController::class, 'forgetpassword']);
+    Route::post('/changepassword', [UserController::class, 'changepassword']);
     //Protected Routes//
-       
 
-        Route::get('/categories',[CategoryController::class,'index']);
-        Route::get('category/randomWallpapers',[WallpaperController::class,'index']);
-        Route::get('get-wallpapers-by-category',[WallpaperController::class,'wallpapersByCategory']);
 
-        Route::get('/detail', [CategoryController::class,'detail']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('category/randomWallpapers', [WallpaperController::class, 'index']);
+    Route::get('get-wallpapers-by-category', [WallpaperController::class, 'wallpapersByCategory']);
 
-    Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::get('/detail', [CategoryController::class, 'detail']);
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
         ////Begin:Api  Wallpaper Review Routes............///
-        Route::get('/get-favroute-wallpapers',[ReviewController::class,'getFavouritWallpapers']);
-        Route::post('/wallpaper_likes',[ReviewController::class,'likes']);
-        Route::post('/wallpaper_dislike',[ReviewController::class,'dislikes']);
-        Route::post('/wallpaper_favourite',[ReviewController::class,'favourites']);
+        Route::get('/get-favroute-wallpapers', [ReviewController::class, 'getFavouritWallpapers']);
+        Route::post('/wallpaper_likes', [ReviewController::class, 'likes']);
+        Route::post('/wallpaper_dislike', [ReviewController::class, 'dislikes']);
+        Route::post('/wallpaper_favourite', [ReviewController::class, 'favourites']);
 
-        
-////end:Api  Wallpaper Review Routes............///
- Route::post('/logout',[UserController::class,'logout']);
-  Route::post('/delete_user',[UserController::class,'deleteUser']);
+
+        ////end:Api  Wallpaper Review Routes............///
+        Route::post('/logout', [UserController::class, 'logout']);
+        Route::post('/delete_user', [UserController::class, 'deleteUser']);
+
     });
+
+    Route::get('/books', [BookController::class, 'index']);
+    Route::get('/book-with-surah/{id}', [BookController::class, 'book']);
+
+    Route::get('/surah', [SurahController::class, 'index']);
+    Route::get('/surah-with-verse/{id}/{lang?}', [SurahController::class, 'surah']);
+    Route::get('/verse', [SurahController::class, 'verse']);
+
 });
