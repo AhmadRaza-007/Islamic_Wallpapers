@@ -34,7 +34,7 @@ class VerseController extends Controller
 
     public function verse($id, $num = null)
     {
-        // isset($num) ?
+        // // isset($num) ?
         // $verse = Verse_language::with('verse', 'language')->where('surah_id', $id)->where('language_id', 1)->get();
         // //  :
         // // $verse = Verse_language::with('verse', 'language')->where('surah_id', $id)->get();
@@ -49,7 +49,7 @@ class VerseController extends Controller
 
         //     $verse[$index]->verse->translate = $translate[$index]->verse;
         // }
-        for ($i = 10; $i < 100; $i++) {
+        for ($i = 1; $i < 78; $i++) {
             $this->downloadFiles($i);
             // echo '<h1>' . $i . '</h1>';
         }
@@ -60,10 +60,18 @@ class VerseController extends Controller
     {
         if ($index > 0) {
 
-            $url = 'https://archive.org/download/aziz.quranhousebd/0020' . $index . '.mp3';
+            if ($index < 10) {
+                $index = '00' . $index;
+            } elseif ($index < 100) {
+                $index = '0' . $index;
+            } elseif ($index < 1000) {
+                $index = $index;
+            }
+
+            $url = 'https://archive.org/download/aziz.quranhousebd/025' . $index . '.mp3';
             $fileContents = Http::get($url)->body();
 
-            $fileName = '0020' . $index . '.mp3';
+            $fileName = '025' . $index . '.mp3';
             $filePath = 'public/' . $fileName; // Adjust the path as needed
 
             // Save the file to the local storage

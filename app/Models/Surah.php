@@ -20,7 +20,7 @@ class Surah extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function verse()
+    public function verses()
     {
         return $this->hasMany(Verse::class);
     }

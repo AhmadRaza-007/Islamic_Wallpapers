@@ -53,7 +53,7 @@ Route::group(['namespace' => 'API'], function () {
     Route::get('/book-with-surah/{id}', [BookController::class, 'book']);
 
     Route::get('/surah', [SurahController::class, 'index']);
-    Route::get('/surah-with-verse/{id}/{lang?}', [SurahController::class, 'surah']);
+    Route::post('/surah-with-verse/{id}/{lang?}', [SurahController::class, 'surah']);
     Route::get('/verse', [SurahController::class, 'verse']);
 
 });
