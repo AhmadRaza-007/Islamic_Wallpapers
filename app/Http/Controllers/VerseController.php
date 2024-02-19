@@ -34,50 +34,78 @@ class VerseController extends Controller
 
     public function verse($id, $num = null)
     {
-        // // isset($num) ?
-        // $verse = Verse_language::with('verse', 'language')->where('surah_id', $id)->where('language_id', 1)->get();
-        // //  :
-        // // $verse = Verse_language::with('verse', 'language')->where('surah_id', $id)->get();
+        // isset($num) ?
+        $verses = Verse_language::with('verse', 'language')->where('surah_id', $id)->where('language_id', 1)->get();
+        //  :
+        // $verse = Verse_language::with('verse', 'language')->where('surah_id', $id)->get();
 
 
-        // $translate = Verse::where('surah_id', $id)->where('language_id', $num)->get();
-        // // return $translate[0];
-        // $surah = Surah::whereId($id)->get();
-        // $languages = Language::orderBy('language')->get();
+        $translate = Verse::where('surah_id', $id)->where('language_id', $num)->get();
+        // return $translate[0];
+        $surah = Surah::whereId($id)->get();
+        $languages = Language::orderBy('language')->get();
 
-        // for ($index = 0; $index < $verse->count(); $index++) {
+        for ($index = 0; $index < $verses->count(); $index++) {
 
-        //     $verse[$index]->verse->translate = $translate[$index]->verse;
-        // }
-        for ($i = 1; $i < 78; $i++) {
-            $this->downloadFiles($i);
-            // echo '<h1>' . $i . '</h1>';
+            $verses[$index]->verse->translate = $translate[$index]->verse;
         }
-        // return view('Books.verse', compact('surah', 'verse', 'languages', 'id'));
+        // $surah = 100;
+        // $ayat = '';
+        // for ($i = 1; $i < 100; $i++) {
+
+        //     if ($surah === 100) {
+        //         break;
+        //     }
+        //     if ($i < 10) {
+        //         $ayat = '00' . $i;
+        //     } elseif ($i < 100) {
+        //         $ayat = '0' . $i;
+        //     } elseif ($i < 1000) {
+        //         $ayat = $i;
+        //     }
+
+        //     $url = 'https://archive.org/download/aziz.quranhousebd/' . $surah . $ayat . '.mp3';
+        //     $fileContents = Http::get($url);
+
+        //     if ($fileContents->successful()) {
+        //         // return 'true';
+        //         $this->downloadFiles($fileContents, $ayat, $surah);
+        //     } else {
+        //         // break;
+        //         $surah++;
+        //         $i = 0;
+        //     }
+        //     // echo '<h1>' . $i . '</h1>';
+        // }
+        return view('Books.verse', compact('surah', 'verses', 'languages', 'id'));
     }
 
-    public function downloadFiles($index)
+    public function downloadFiles($fileContents, $ayat, $surah)
     {
-        if ($index > 0) {
+        if ($ayat > 0) {
 
-            if ($index < 10) {
-                $index = '00' . $index;
-            } elseif ($index < 100) {
-                $index = '0' . $index;
-            } elseif ($index < 1000) {
-                $index = $index;
-            }
+            // if ($ayat < 10) {
+            //     $ayat = '00' . $ayat;
+            // } elseif ($ayat < 100) {
+            //     $ayat = '0' . $ayat;
+            // } elseif ($ayat < 1000) {
+            //     $ayat = $ayat;
+            // }
 
-            $url = 'https://archive.org/download/aziz.quranhousebd/025' . $index . '.mp3';
-            $fileContents = Http::get($url)->body();
+            // $url = 'https://archive.org/download/aziz.quranhousebd/061' . $ayat . '.mp3';
+            // $fileContents = Http::get($url);
 
-            $fileName = '025' . $index . '.mp3';
+            $fileContents->body();
+
+            // if ($fileContents->successful()) {
+            //     return 'true';
+            // }
+
+            $fileName = '0' . $surah . $ayat . '.mp3';
             $filePath = 'public/' . $fileName; // Adjust the path as needed
 
             // Save the file to the local storage
             Storage::put($filePath, $fileContents);
-
-            return $filePath;
         }
     }
 
@@ -172,6 +200,8 @@ class VerseController extends Controller
             'surah_id' => 'required',
             'verse_number' => 'required',
             'verse' => 'required',
+            'startTime' => 'numeric',
+            'endTime' => 'numeric',
         ]);
         // return $request->all();
         try {

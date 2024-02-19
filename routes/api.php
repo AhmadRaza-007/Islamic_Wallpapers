@@ -21,12 +21,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['namespace' => 'API'], function () {
+    //count number of installs//
+    Route::post('userid/{id}', [UserController::class, 'userId']);
+
     //Public Routes//
     Route::post('/login', [UserController::class, 'postLogin']);
     Route::post('/signup', [UserController::class, 'signup']);
     Route::post('/forget', [UserController::class, 'forgetpassword']);
     Route::post('/changepassword', [UserController::class, 'changepassword']);
-    //Protected Routes//
 
 
     Route::get('/categories', [CategoryController::class, 'index']);
@@ -35,6 +37,7 @@ Route::group(['namespace' => 'API'], function () {
 
     Route::get('/detail', [CategoryController::class, 'detail']);
 
+    //Protected Routes//
     Route::group(['middleware' => 'auth:sanctum'], function () {
         ////Begin:Api  Wallpaper Review Routes............///
         Route::get('/get-favroute-wallpapers', [ReviewController::class, 'getFavouritWallpapers']);

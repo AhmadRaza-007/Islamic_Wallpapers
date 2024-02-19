@@ -19,6 +19,10 @@ class CreateVersesTable extends Migration
             $table->string('language_id');
             $table->string('verse_number');
             $table->text('verse');
+            $table->text('translate');
+            $table->string('audio');
+            $table->string('startTime');
+            $table->string('endTime');
             $table->timestamps();
         });
     }

@@ -14,6 +14,8 @@ class Verse extends Model
         'verse_number',
         'verse',
         'language_id',
+        'startTime',
+        'endTime',
     ];
 
     /**

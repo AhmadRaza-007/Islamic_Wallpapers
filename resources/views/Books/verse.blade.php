@@ -4,7 +4,7 @@
         <div class="container-fluid px-4">
             <div class="d-flex justify-content-between align-center">
                 <h1 class="mt-4">Verse's</h1>
-                <p class="mt-4">Count: {{ $verse->count() }}</p>
+                <p class="mt-4">Count: {{ $verses->count() }}</p>
             </div>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -113,7 +113,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="updateModalLabel">Update Category</h5>
+                                    <h5 class="modal-title" id="updateModalLabel">Update Verse</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
@@ -123,27 +123,28 @@
                                         <input type="hidden" name="verse_hidden" class="form-control" id="verse_hidden"
                                             placeholder="Enter Number" required>
                                         <div class="mb-3">
-                                            <label for="category_id" class="form-label">Surah Name</label>
+                                            <label for="category_id" class="form-label">Verse Name</label>
                                             <select class="form-select" name="surah_id" id="edit_surah_id"
-                                                aria-label="Default select example" required>
-                                                <option disabled selected>Select Surah</option>
+                                                aria-label="Default select example" required disabled>
+                                                <option disabled>Select Surah</option>
                                                 @foreach ($surah as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->surah }}</option>
+                                                    <option value="{{ $item->id }}" selected>{{ $item->surah }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="category_id" class="form-label">Surah Name</label>
+                                        {{-- <div class="mb-3">
+                                            <label for="category_id" class="form-label">Language</label>
                                             <select class="form-select" name="language_id" id="surah_id"
                                                 aria-label="Default select example" required>
                                                 <option disabled selected>Select Language</option>
-                                                {{-- <option selected value="0">Arabic</option> --}}
                                                 @foreach ($languages as $language)
                                                     <option value="{{ $language->id }}">{{ $language->language }}
                                                     </option>
                                                 @endforeach
                                             </select>
-                                        </div>
+                                        </div> --}}
+                                        <input type="hidden" name="language_id" value="" id="language_id_hidden">
+                                        <input type="hidden" name="surah_id" value="" id="surah_id_hidden">
                                         <div class="mb-3">
                                             <label for="category" class="form-label">Verse Number</label>
                                             <input type="text" name="verse_number" class="form-control"
@@ -152,6 +153,16 @@
                                         <div class="mb-3">
                                             <label for="category" class="form-label">Verse</label>
                                             <input type="text" name="verse" class="form-control" id="edit_verse"
+                                                placeholder="Enter Verse" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="category" class="form-label">Audio Start Time</label>
+                                            <input type="text" name="startTime" class="form-control" id="startTime"
+                                                placeholder="Enter Verse" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="category" class="form-label">Audio End Time</label>
+                                            <input type="text" name="endTime" class="form-control" id="endTime"
                                                 placeholder="Enter Verse" required>
                                         </div>
                                     </div>
@@ -242,10 +253,16 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($verse as $key => $verse)
+                            @foreach ($verses as $key => $verse)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $verse->verse->verse_number }}</td>
+                                    <td>
+                                        <audio id="audio{{ $key }}"
+                                            src="{{ asset('assets/fullQuran/' . $verse->verse->audio) }}" controls
+                                            oncanplay="playAudioWithTime({{ $key }}, {{ $verses[$key]->verse->startTime }}, {{ $verses[$key]->verse->endTime }})">
+                                        </audio>
+                                    </td>
                                     <td style="font-size: 1.5rem;">
                                         {{ $verse->verse->verse }}
                                         <br>
@@ -278,6 +295,49 @@
 @section('script')
     <script script>
         var languages = @json($languages);
+
+        function playAudioWithTime(index, startTime, endTime) {
+            var audio = document.getElementById('audio' + index);
+            if (audio) {
+                // Set the currentTime to the startTime
+                audio.currentTime = startTime;
+
+                // When the audio reaches the endTime, pause it
+                audio.addEventListener("timeupdate", function() {
+                    if (audio.currentTime >= endTime) {
+                        audio.pause();
+                        startNextAudio(index)
+                    }
+                });
+            }
+        }
+
+
+
+        function pauseAllAudio() {
+            var audios = document.querySelectorAll('audio');
+            audios.forEach(function(audio) {
+                audio.pause();
+            });
+        }
+
+        function startNextAudio(nextIndex) {
+            var nextAudio = document.getElementById('audio' + (nextIndex + 1));
+            if (nextAudio) {
+                nextAudio.play();
+            }
+        }
+
+
+
+
+
+        // When the audio ends, pause it
+        // audio.addEventListener("timeupdate", function() {
+        //     if (audio.currentTime >= endTime) {
+        //         audio.pause();
+        //     }
+        // });
     </script>
     <script src="{{ asset('js/custom.js') }}"></script>
     <script>
@@ -292,9 +352,13 @@
                 success: function(data) {
                     console.log(data)
                     $("#edit_surah_id").val(data.surah_id);
+                    $("#surah_id_hidden").val(data.surah_id);
                     $("#edit_verse_number").val(data.verse_number)
                     $("#edit_verse").val(data.verse);
                     $("#verse_hidden").val(data.id);
+                    $("#language_id_hidden").val(data.language_id);
+                    $("#startTime").val(data.startTime);
+                    $("#endTime").val(data.endTime);
                     $("#updateModalLabel").modal("show");
                 }
             })

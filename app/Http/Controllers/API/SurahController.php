@@ -39,11 +39,7 @@ class SurahController extends Controller
 
     public function surah(Request $request, $id, $lang = '1')
     {
-        // return Verse::groupBy('translate')->get();
         try {
-            $request->validate([
-                'lango' => 'required'
-            ]);
 
             $translate = Verse::where('surah_id', $id)->where('language_id', $lang)->get();
 
@@ -56,9 +52,7 @@ class SurahController extends Controller
                     $verse->translate = $translate[$key]->verse;
                 }
             }
-            // return $surah;
 
-            //    return $surah = Verse::with('surah')->get();
             try {
                 return response()->json([
                     'status' => 'Success',
@@ -94,7 +88,10 @@ class SurahController extends Controller
         }
         // Add the manually created verse to the collection
         // $verses[0]->translate = $lang[0];
-        return response()->json($verses);
+        return response()->json([
+            'status' => 'Success',
+            'data' => $verses,
+        ]);
     }
 
 
