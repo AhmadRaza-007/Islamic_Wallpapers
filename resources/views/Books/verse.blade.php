@@ -128,7 +128,8 @@
                                                 aria-label="Default select example" required disabled>
                                                 <option disabled>Select Surah</option>
                                                 @foreach ($surah as $item)
-                                                    <option value="{{ $item->id }}" selected>{{ $item->surah }}</option>
+                                                    <option value="{{ $item->id }}" selected>{{ $item->surah }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -251,6 +252,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
+                        <span id="timestamp">time:</span>
 
                         <tbody>
                             @foreach ($verses as $key => $verse)
@@ -259,8 +261,10 @@
                                     <td>{{ $verse->verse->verse_number }}</td>
                                     <td>
                                         <audio id="audio{{ $key }}"
-                                            src="{{ asset('assets/fullQuran/' . $verse->verse->audio) }}" controls
-                                            oncanplay="playAudioWithTime({{ $key }}, {{ $verses[$key]->verse->startTime }}, {{ $verses[$key]->verse->endTime }})">
+                                            src="{{ 'https://quran114.limpidsol.com/assets/fullQuran/' . $verse->verse->audio }}"
+                                            controls
+                                            onplay="playAudioWithTime({{ $key }}, {{ $verses[$key]->verse->startTime ?? 0 }}, {{ $verses[$key]->verse->endTime ?? 500000 }})"
+                                            preload>
                                         </audio>
                                     </td>
                                     <td style="font-size: 1.5rem;">
@@ -293,32 +297,45 @@
     </main>
 @endsection
 @section('script')
-    <script script>
+    <script>
         var languages = @json($languages);
 
+        // TODO: Audio Settings
         function playAudioWithTime(index, startTime, endTime) {
             var audio = document.getElementById('audio' + index);
             if (audio) {
                 // Set the currentTime to the startTime
-                audio.currentTime = startTime;
+                if (audio.currentTime < startTime) audio.currentTime = startTime;
+
+                audio.addEventListener('click', function(event) {
+                    // Calculate the click position relative to the audio element
+                    var clickX = event.pageX - this.offsetLeft;
+
+                    // Calculate the timeline width
+                    var timelineWidth = this.offsetWidth;
+
+                    // Calculate the duration of the audio
+                    var duration = this.duration;
+
+                    // Calculate the clicked time
+                    var clickedTime = (clickX / timelineWidth) * duration;
+
+                    // Store the clicked time or perform any other action with it
+                    console.log('Clicked time:', clickedTime);
+                });
 
                 // When the audio reaches the endTime, pause it
                 audio.addEventListener("timeupdate", function() {
                     if (audio.currentTime >= endTime) {
                         audio.pause();
-                        startNextAudio(index)
+                        startNextAudio(index);
                     }
+
+                    // Update HTML element with current time in seconds
+                    console.log('timestamp' + index);
+                    document.getElementById('timestamp').textContent = Math.round(audio.currentTime);
                 });
             }
-        }
-
-
-
-        function pauseAllAudio() {
-            var audios = document.querySelectorAll('audio');
-            audios.forEach(function(audio) {
-                audio.pause();
-            });
         }
 
         function startNextAudio(nextIndex) {
@@ -327,17 +344,6 @@
                 nextAudio.play();
             }
         }
-
-
-
-
-
-        // When the audio ends, pause it
-        // audio.addEventListener("timeupdate", function() {
-        //     if (audio.currentTime >= endTime) {
-        //         audio.pause();
-        //     }
-        // });
     </script>
     <script src="{{ asset('js/custom.js') }}"></script>
     <script>

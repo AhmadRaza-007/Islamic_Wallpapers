@@ -196,6 +196,13 @@ class VerseController extends Controller
      */
     public function update(Request $request)
     {
+
+        // for ($index = 1; $index < 114; $index++) {
+        //     $surah = $index;
+        //     Verse::where('surah_id', $surah)->where('language_id', 1)->update([
+        //         'audio' => 'chapter' . $surah .'.mp3',
+        //     ]);
+        // }
         $data = $request->validate([
             'surah_id' => 'required',
             'verse_number' => 'required',
@@ -203,7 +210,7 @@ class VerseController extends Controller
             'startTime' => 'numeric',
             'endTime' => 'numeric',
         ]);
-        // return $request->all();
+        // return $data;
         try {
             Verse::find($request->verse_hidden)->update($data);
             Verse_language::where('verse_id', $request->verse_hidden)->update([

@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
 // Route::get('/cat/{id}', [FrontController::class, 'cat'])->name('frontCat');
 
 
-// Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/books', [BooksController::class, 'index'])->name('books');
     Route::get('/book/{id}', [BooksController::class, 'book'])->name('bookId');
     Route::post('book/add', [BooksController::class, 'store'])->name('storebook');
@@ -107,4 +107,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('language/edit/{id}', [LanguagesController::class, 'edit'])->name('showlanguage');
     Route::post('language/update', [LanguagesController::class, 'update'])->name('updatelanguage');
     Route::get('language/delete/{id}', [LanguagesController::class, 'destroy'])->name('deletelanguage');
-// });
+});
