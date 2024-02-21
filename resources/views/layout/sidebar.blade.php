@@ -72,13 +72,13 @@
                         </div>
                     </form>
                 </a>
-                <form method="post" action="{{ route('logout') }}" id="lform" style="position: absolute; bottom:5rem;">
+                {{-- <form method="post" action="{{ route('logout') }}" id="lform" style="position: absolute; bottom:5rem;">
                     @csrf
                     <a class="nav-link" onclick="document.getElementById('lform').submit();">
                         <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
                         Logout
                     </a>
-                </form>
+                </form> --}}
             </div>
         </div>
         <div class="sb-sidenav-footer">

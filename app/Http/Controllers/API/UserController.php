@@ -136,8 +136,11 @@ class UserController extends Controller
                 'status' => 'error',
                 'message' => 'Provide Correct Email',
             ]);
+
         }
     }
+
+
 
     public function changePassword(Request $request)
     {

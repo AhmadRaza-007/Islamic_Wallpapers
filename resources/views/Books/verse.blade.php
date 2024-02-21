@@ -307,22 +307,22 @@
                 // Set the currentTime to the startTime
                 if (audio.currentTime < startTime) audio.currentTime = startTime;
 
-                audio.addEventListener('click', function(event) {
-                    // Calculate the click position relative to the audio element
-                    var clickX = event.pageX - this.offsetLeft;
+                // audio.addEventListener('click', function(event) {
+                //     // Calculate the click position relative to the audio element
+                //     var clickX = event.pageX - this.offsetLeft;
 
-                    // Calculate the timeline width
-                    var timelineWidth = this.offsetWidth;
+                //     // Calculate the timeline width
+                //     var timelineWidth = this.offsetWidth;
 
-                    // Calculate the duration of the audio
-                    var duration = this.duration;
+                //     // Calculate the duration of the audio
+                //     var duration = this.duration;
 
-                    // Calculate the clicked time
-                    var clickedTime = (clickX / timelineWidth) * duration;
+                //     // Calculate the clicked time
+                //     var clickedTime = (clickX / timelineWidth) * duration;
 
-                    // Store the clicked time or perform any other action with it
-                    console.log('Clicked time:', clickedTime);
-                });
+                //     // Store the clicked time or perform any other action with it
+                //     console.log('Clicked time:', clickedTime);
+                // });
 
                 // When the audio reaches the endTime, pause it
                 audio.addEventListener("timeupdate", function() {
@@ -332,7 +332,7 @@
                     }
 
                     // Update HTML element with current time in seconds
-                    console.log('timestamp' + index);
+                    // console.log('timestamp' + index);
                     document.getElementById('timestamp').textContent = Math.round(audio.currentTime);
                 });
             }
